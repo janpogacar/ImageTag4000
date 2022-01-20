@@ -27,7 +27,7 @@ def tagImages():
         # Loop over all images
         for x in imageList: 
             # Open image
-            image = Image.open("Test/" + x)
+            image = Image.open(sourcePath + "/" + x)
             # Call draw Method to add 2D graphics in an image
             I1 = ImageDraw.Draw(image) 
 
