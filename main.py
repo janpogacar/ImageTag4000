@@ -1,6 +1,6 @@
 from PIL import Image, ImageDraw, ImageFont
 import os
-from tkinter import Tk, Entry, Button, Label, filedialog, END
+from tkinter import Tk, ttk, Entry, Button, Label, filedialog, END, StringVar
 
 
 def tagImages():
@@ -9,7 +9,7 @@ def tagImages():
         imageList = os.listdir(sourcePath)
 
         # List tge allowable image endings
-        imgEndings = ["jpg", "jepg", "png", "gif"]
+        imgEndings = ["jpg", "jepg"]
 
         # Loop over filenames in temporary list
         tmpList = imageList.copy()
@@ -20,19 +20,23 @@ def tagImages():
 
         if len(imageList) == 0:
             print("No images present in selected folder")
-            outputLabel.config(text = "No images present in selected folder")
+            label_text.set("No images present in selected folder")
             return
             
-
+        imageCount = 0
         # Loop over all images
-        for x in imageList: 
+        for x in imageList:
+            imageCount += 1
+            print(x)
+            label_text.set("Tagging picture %d of %d..." %(imageCount, len(imageList)))
+            m.update()
             # Open image
             image = Image.open(sourcePath + "/" + x)
             # Call draw Method to add 2D graphics in an image
             I1 = ImageDraw.Draw(image) 
 
             # Calculate text coordinate location
-            textCoord = (int(25), int(image.size[1]*19/20))
+            textCoord = (int(25), int(25))
 
             # Font setup, size is 80
             myFont = ImageFont.truetype('Fonts/DejaVuSans.ttf', 80)
@@ -44,11 +48,11 @@ def tagImages():
             image.save(destPath + "/" + x)
 
         print("Image generation successful, %d pictures tagged." %len(imageList))
-        outputLabel.config(text = "Image generation successful, %d pictures tagged." %len(imageList))
+        label_text.set("Image generation successful, %d pictures tagged." %len(imageList))
 
     except:
         print("An error has occured.")
-        outputLabel.config(text = "An error has occured.")
+        label_text.set("An error has occured.")
     
 def select_source_file():
     global sourcePath
@@ -73,7 +77,9 @@ e2 = Entry(m, width=100)
 e1.grid(row=0, columnspan=2)
 e2.grid(row=1, columnspan=2)
 
-outputLabel = Label(m, text='Select files for generation',  width=50)
+label_text = StringVar()
+label_text.set('Select files for generation')
+outputLabel = Label(m, textvariabl=label_text,  width=50)
 outputLabel.grid(row = 2, columnspan = 2)
 
 button1 = Button(m, text='Tag', width=50, command=tagImages)
@@ -85,5 +91,14 @@ buttonSelectSource = Button(m, text='Select source', width=20, command=select_so
 buttonSelectDest = Button(m, text='Select Destination', width=20, command=select_dest_file)
 buttonSelectSource.grid(row=0, column=3)
 buttonSelectDest.grid(row=1, column=3)
+
+#pb = ttk.Progressbar(
+#    m,
+#    orient='horizontal',
+#    mode='indeterminate',
+#    length=500
+#)
+
+#pb.grid(row = 4, column = 0, columnspan = 2)
 
 m.mainloop()
