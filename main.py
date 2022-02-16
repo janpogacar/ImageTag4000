@@ -20,7 +20,7 @@ def tagImages():
 
         if len(imageList) == 0:
             print("No images present in selected folder")
-            label_text.set("No images present in selected folder")
+            label_text.set("V izbrani mapi ni slik")
             return
             
         imageCount = 0
@@ -28,7 +28,7 @@ def tagImages():
         for x in imageList:
             imageCount += 1
             print(x)
-            label_text.set("Tagging picture %d of %d..." %(imageCount, len(imageList)))
+            label_text.set("Označujem sliko %d od %d..." %(imageCount, len(imageList)))
             m.update()
             # Open image
             image = Image.open(sourcePath + "/" + x)
@@ -48,21 +48,21 @@ def tagImages():
             image.save(destPath + "/" + x)
 
         print("Image generation successful, %d pictures tagged." %len(imageList))
-        label_text.set("Image generation successful, %d pictures tagged." %len(imageList))
+        label_text.set("Označevanje uspešno, Število označenih slik: %d" %len(imageList))
 
     except:
         print("An error has occured.")
-        label_text.set("An error has occured.")
+        label_text.set("Oprostite, prišlo je do napake.")
     
 def select_source_file():
     global sourcePath
-    sourcePath = filedialog.askdirectory(title="Select a File")
+    sourcePath = filedialog.askdirectory(title="Izberite mapo")
     e1.delete(0, END)
     e1.insert(0, sourcePath)
 
 def select_dest_file():
     global destPath
-    destPath = filedialog.askdirectory(title="Select a File")
+    destPath = filedialog.askdirectory(title="Izberite mapo")
     e2.delete(0, END)
     e2.insert(0, destPath)
     
@@ -78,27 +78,18 @@ e1.grid(row=0, columnspan=2)
 e2.grid(row=1, columnspan=2)
 
 label_text = StringVar()
-label_text.set('Select files for generation')
+label_text.set('Izberite mapo')
 outputLabel = Label(m, textvariabl=label_text,  width=50)
 outputLabel.grid(row = 2, columnspan = 2)
 
-button1 = Button(m, text='Tag', width=50, command=tagImages)
-button2 = Button(m, text='Exit', width=50, command=m.destroy)
+button1 = Button(m, text='Zaženi', width=50, command=tagImages)
+button2 = Button(m, text='Izhod', width=50, command=m.destroy)
 button1.grid(row=3, column=0)
 button2.grid(row=3, column=1)
 
-buttonSelectSource = Button(m, text='Select source', width=20, command=select_source_file)
-buttonSelectDest = Button(m, text='Select Destination', width=20, command=select_dest_file)
+buttonSelectSource = Button(m, text='Izberite izvorno mapo', width=20, command=select_source_file)
+buttonSelectDest = Button(m, text='Izberite ciljno mapo', width=20, command=select_dest_file)
 buttonSelectSource.grid(row=0, column=3)
 buttonSelectDest.grid(row=1, column=3)
-
-#pb = ttk.Progressbar(
-#    m,
-#    orient='horizontal',
-#    mode='indeterminate',
-#    length=500
-#)
-
-#pb.grid(row = 4, column = 0, columnspan = 2)
 
 m.mainloop()
